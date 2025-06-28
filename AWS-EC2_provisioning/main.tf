@@ -12,6 +12,6 @@ terraform{
 }
  
  resource "aws_instance" "example"{
-   ami = "ami-0c55b159cbfafe1f0"
+   ami = "ami-0c2b8ca1dad447f8a"
    instance_type = "t2.micro"
 }
