@@ -1,0 +1,20 @@
+# Terraform working directory and plugins
+.terraform/
+*.exe
+
+# State files (local/remote)
+*.tfstate
+*.tfstate.backup
+
+# Crash log
+crash.log
+
+# Sensitive files
+*.pem
+*.key
+*.id_rsa
+
+# Prevent local env files or overrides
+*.tfvars
+*.env
+
