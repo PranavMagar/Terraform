@@ -13,6 +13,18 @@ terraform{
  
  module "aws_instance"{
    source = "./modules/ec2"
-   ami = "ami-0c2b8ca1dad447f8a"
+   ami_id = "ami-0c2b8ca1dad447f8a"
    instance_type = "t2.micro"
+}
+
+/*resource "awsdynamodb_table"  "terraform_lock"{
+  name          = "terraform-lock"
+  billing_mode  = "PAY_PER_REQUEST"
+  hash_key      = "LockID"
+
+
+attribute (
+  name = "LockID"
+  type = "S"
+}
 }
