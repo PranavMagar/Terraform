@@ -7,8 +7,8 @@ variable "cidr" {
 }
 
 resource "aws_key_pair" "example" {
-  key_name   = "terraform-key"
-  public_key = file("~/.ssh/id_rsa.pub")
+  key_name   = "test01"
+  public_key = file("C:/Users/Pranav/Downloads/test01.pub")
 }
 
 resource "aws_vpc" "main" {
@@ -77,7 +77,7 @@ resource "aws_instance" "tictactoe_server" {
   connection {
     type        = "ssh"
     user        = "ubuntu"
-    private_key = file("~/.ssh/id_rsa")
+    private_key = file("C:/Users/Pranav/Downloads/test01.pem")
     host        = self.public_ip
   }
 
