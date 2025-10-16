@@ -1,0 +1,80 @@
+<script>
+    const expenseForm = document.getElementById('expenseForm');
+    const expenseList = document.getElementById('expenseList');
+    const totalExpense = document.getElementById('totalExpense');
+    const ctx = document.getElementById('expenseChart').getContext('2d');
+
+    let expenses = JSON.parse(localStorage.getItem("expenses")) || [];
+    let chart;
+
+    function saveToLocal() {
+        localStorage.setItem("expenses", JSON.stringify(expenses));
+    }
+
+    function renderExpenses() {
+        expenseList.innerHTML = "";
+        let total = 0;
+
+        expenses.forEach((exp, index) => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${exp.date}</td>
+                <td>${exp.category}</td>
+                <td>₹${exp.amount}</td>
+                <td>${exp.note}</td>
+                <td><button onclick="deleteExpense(${index})" class="delete-btn">❌</button></td>
+            `;
+            expenseList.appendChild(row);
+            total += parseFloat(exp.amount);
+        });
+
+        totalExpense.textContent = total.toFixed(2);
+        saveToLocal();
+        renderChart();
+    }
+
+    function deleteExpense(index) {
+        expenses.splice(index, 1);
+        renderExpenses();
+    }
+
+    function renderChart() {
+        const categories = {};
+        expenses.forEach(exp => {
+            categories[exp.category] = (categories[exp.category] || 0) + parseFloat(exp.amount);
+        });
+
+        const data = {
+            labels: Object.keys(categories),
+            datasets: [{
+                label: "Expenses",
+                data: Object.values(categories),
+                backgroundColor: ["#007bff", "#ff6384", "#36a2eb", "#ffcd56", "#4bc0c0"]
+            }]
+        };
+
+        if (chart) chart.destroy();
+        chart = new Chart(ctx, {
+            type: 'doughnut',
+            data: data
+        });
+    }
+    
+    expenseForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const date = document.getElementById('date').value;
+        const category = document.getElementById('category').value;
+        const amount = document.getElementById('amount').value;
+        const note = document.getElementById('note').value;
+
+        if (!date || !category || !amount) return;
+
+        expenses.push({ date, category, amount, note });
+        expenseForm.reset();
+        renderExpenses();
+    });
+
+    renderExpenses();
+</script>
+
+
