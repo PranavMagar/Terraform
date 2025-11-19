@@ -86,28 +86,20 @@ resource "aws_instance" "tictactoe_server" {
     destination = "/home/ubuntu/app.py"
   }
 
-  provisioner "file" {
-    source      = "requirements.txt"
-    destination = "/home/ubuntu/requirements.txt"
-  }
 
-  provisioner "file" {
-    source      = "templates/index.html"
-    destination = "/home/ubuntu/templates/index.html"
-  }
-
-  provisioner "remote-exec" {
+   provisioner "remote-exec" {
     inline = [
-      "sudo apt update -y",
-      "sudo apt install -y python3-pip",
-      "pip3 install -r /home/ubuntu/requirements.txt",
+      "echo 'Hello from the remote instance'",
+      "sudo apt update -y",  # Update package lists (for ubuntu)
+      "sudo apt-get install -y python3-pip",  # Example package installation
       "cd /home/ubuntu",
-      "nohup python3 app.py > app.log 2>&1 &"
+      "sudo pip3 install flask",
+      "sudo python3 app.py &",
     ]
   }
-
-  tags = {
-    Name = "TicTacToeServer"
+ tags = {
+    Name       = "TicTacToeServer"
+    ServerName = "MyTicTacToeApp"  # <- This is the custom server name tag
   }
 }
 

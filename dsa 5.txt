@@ -1,0 +1,113 @@
+''' PRACTICAL - 5 '''
+import tensorflow as tf
+
+# Disable eager execution (use TF1-style graph + Session)
+tf.compat.v1.disable_eager_execution()
+
+
+# ---------------------------------------------------------------------
+# Helper function 1: Basic multiplication with auto-casting
+# ---------------------------------------------------------------------
+def multiply_constants(a, b):
+    tensor_a = tf.constant(a)
+    tensor_b = tf.constant(b)
+
+    # Auto-cast to common dtype
+    if tensor_a.dtype != tensor_b.dtype:
+        if "complex" in (tensor_a.dtype.name, tensor_b.dtype.name):
+            target_dtype = tf.complex128
+        elif "float" in (tensor_a.dtype.name, tensor_b.dtype.name):
+            target_dtype = tf.float32
+        else:
+            target_dtype = tf.int32
+
+        tensor_a = tf.cast(tensor_a, target_dtype)
+        tensor_b = tf.cast(tensor_b, target_dtype)
+
+    result = tf.multiply(tensor_a, tensor_b)
+
+    with tf.compat.v1.Session() as sess:
+        print(f"Multiplication result ({result.dtype}):", sess.run(result))
+
+
+# ---------------------------------------------------------------------
+# Example 1: Simple multiplication of two constants
+# ---------------------------------------------------------------------
+a = tf.constant(5)
+b = tf.constant(4)
+result = tf.multiply(a, b)
+
+with tf.compat.v1.Session() as sess:
+    print("Result of multiplication:", sess.run(result))
+
+
+# ---------------------------------------------------------------------
+# Run all test cases
+# ---------------------------------------------------------------------
+print("\nExample 1: Integer multiplication")
+multiply_constants(5, 3)
+
+print("\nExample 2: Float multiplication")
+multiply_constants(5.0, 3.2)
+
+print("\nExample 3: Mixed types (int and float)")
+multiply_constants(5, 3.2)
+
+print("\nExample 4: Complex multiplication")
+multiply_constants(3+2j, 4+1j)
+
+
+# ---------------------------------------------------------------------
+# Helper function 2: Safe casting (always cast mismatched types to float32)
+# ---------------------------------------------------------------------
+def multiply_constants_safe(a, b):
+    tensor_a = tf.constant(a)
+    tensor_b = tf.constant(b)
+
+    if tensor_a.dtype != tensor_b.dtype:
+        tensor_a = tf.cast(tensor_a, tf.float32)
+        tensor_b = tf.cast(tensor_b, tf.float32)
+
+    result = tf.multiply(tensor_a, tensor_b)
+
+    with tf.compat.v1.Session() as sess:
+        print(f"Safe multiplication result ({result.dtype}):", sess.run(result))
+
+
+print("\nSafe multiplication:")
+multiply_constants_safe(5, 3)
+multiply_constants_safe(5.0, 3.2)
+multiply_constants_safe(5, 3.2)
+multiply_constants_safe(3+2j, 4+1j)
+
+
+# ---------------------------------------------------------------------
+# Helper function 3: Auto-promote using custom rules
+# ---------------------------------------------------------------------
+def multiply_constants_promote(a, b):
+    tensor_a = tf.constant(a)
+    tensor_b = tf.constant(b)
+
+    # Promotion: complex > float > int
+    if tensor_a.dtype != tensor_b.dtype:
+        if "complex" in (tensor_a.dtype.name, tensor_b.dtype.name):
+            target_dtype = tf.complex128
+        elif "float" in (tensor_a.dtype.name, tensor_b.dtype.name):
+            target_dtype = tf.float32
+        else:
+            target_dtype = tf.int32
+
+        tensor_a = tf.cast(tensor_a, target_dtype)
+        tensor_b = tf.cast(tensor_b, target_dtype)
+
+    result = tf.multiply(tensor_a, tensor_b)
+
+    with tf.compat.v1.Session() as sess:
+        print(f"Auto-promoted result ({result.dtype}):", sess.run(result))
+
+
+print("\nAuto-promoted multiplication:")
+multiply_constants_promote(5, 3)
+multiply_constants_promote(5.0, 3.2)
+multiply_constants_promote(5, 3.2)
+multiply_constants_promote(3+2j, 4+1j)

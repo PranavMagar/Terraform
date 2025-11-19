@@ -1,0 +1,40 @@
+''' PRACTICAL - 8 '''
+
+from bokeh.plotting import figure, show
+from bokeh.io import output_notebook
+# Display plots directly in the notebook
+output_notebook()
+# --- Data ---
+years = [2016, 2017, 2018, 2019, 2020]
+revenue = [550, 650, 760, 800, 850]
+profit = [80, 130, 190, 230, 280]
+# --- Create figure ---
+p = figure(
+    title="Company Revenue and Profit Over Years",
+    x_axis_label='Year',
+    y_axis_label='Amount (in USD)',
+    width=700,
+    height=400,
+    toolbar_location="right"
+)
+
+# --- Plot lines ---
+rev_line = p.line(years, revenue, line_width=3, color='blue', legend_label="Revenue")
+prof_line = p.line(years, profit, line_width=3, color='green', legend_label="Profit")
+
+# --- Add circle and square markers ---
+p.circle(years, revenue, size=8, color='blue')
+p.square(years, profit, size=8, color='green')
+
+# --- Style the axes and title ---
+p.title.text_font_size = '13pt'
+p.xaxis.axis_label_text_font_style = 'italic'
+p.yaxis.axis_label_text_font_style = 'italic'
+# --- Customize legend ---
+p.legend.title = 'Metrics'
+p.legend.title_text_font_style = 'italic'
+p.legend.location = 'top_left'
+p.legend.label_text_font_size = '10pt'
+
+# --- Show plot ---
+show(p)

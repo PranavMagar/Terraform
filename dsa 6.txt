@@ -1,0 +1,28 @@
+''' PRACTICAL - 6 '''
+!pip install tensorflow tensorboard
+
+import tensorflow.compat.v1 as tf
+tf.disable_v2_behavior()
+
+# Define variables and computation graph
+x = tf.Variable(3, name="x")
+y = tf.Variable(4, name="y")
+f = x * x * y + y + 2
+
+# Initialize variables
+init = tf.global_variables_initializer()
+
+# Create a temporary directory for log files in Colab
+logdir = "/tmp/logs"
+
+# Create a FileWriter to write graph logs to the temporary directory
+writer = tf.summary.FileWriter(logdir, tf.get_default_graph())
+
+with tf.Session() as sess:
+    sess.run(init)
+    result = sess.run(f)
+    print("Result:", result)
+writer.close()
+# Load TensorBoard extension and start TensorBoard inline
+%load_ext tensorboard
+%tensorboard --logdir /tmp/logs

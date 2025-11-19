@@ -1,0 +1,39 @@
+''' Practical - 6[1] '''
+#Rule Based Sentiment Analysis
+import nltk
+import nltk.sentiment.sentiment_analyzer
+import nltk.sentiment.util
+#Single word Sentiment Analysis
+positive_words = ['love', 'hope', 'joy']
+text = 'Rainfall this year brings lot of hope and joy to Farmers.'.split()
+print(text)
+analysis = nltk.sentiment.util.extract_unigram_feats(text,positive_words)
+print(analysis)
+
+#Multiword Sentiment Analysis
+negative_words = [('heavy', 'rains'), ('flood', 'bengaluru')]
+text = 'heavy rains cause flash flooding in bengaluru'.split()
+print(text)
+analysis = nltk.sentiment.util.extract_bigram_feats(text, negative_words)
+print(analysis)
+
+# Marking negativity
+text = 'The rainfall last year did not bring joy to Farmers'.split()
+print(text)
+negation = nltk.sentiment.util.mark_negation(text)
+print(negation)
+
+# Sentiment Analysis
+positive_words = ['love', 'genuine', 'liked']
+text = "I like the items in this shop, very genuine and quality is well maintained."
+if '_NEG' in ' '.join(nltk.sentiment.util.mark_negation(text.split())):
+    score =-1 
+else:
+    analysis = nltk.sentiment.util.extract_unigram_feats(text.split(),positive_words)
+ 
+    if True in analysis.values():
+        score = 1
+    else:
+        score = 0
+print("The sentiment score is:")
+print(score)
