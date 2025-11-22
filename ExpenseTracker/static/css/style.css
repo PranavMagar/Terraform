@@ -1,0 +1,149 @@
+:root {
+  --primary-gradient: linear-gradient(90deg, #00b4db, #0083b0);
+  --accent-color: #00b4db;
+  --card-bg: rgba(15, 25, 35, 0.7);
+  --text-light: #f0f0f0;
+}
+
+body {
+  background: radial-gradient(circle at top left, #0e1821, #0a0e13);
+  font-family: "Inter", "Segoe UI", sans-serif;
+  color: var(--text-light);
+}
+
+/* Navbar */
+.navbar {
+  background: linear-gradient(90deg, #0f2027, #203a43, #2c5364);
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+* {
+  color: var(--text-light) !important;
+}
+
+/* Logo */
+.logo-img {
+  height: 38px;
+  width: auto;
+  border-radius: 10px;
+  transition: transform 0.3s ease, filter 0.3s ease;
+}
+.logo-img:hover {
+  transform: scale(1.1);
+  filter: drop-shadow(0 0 6px rgba(0, 180, 219, 0.6));
+}
+
+/* Buttons */
+.btn-accent {
+  background: var(--accent-color);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  transition: all 0.3s ease;
+}
+.btn-accent:hover {
+  background: #00a2c2;
+  box-shadow: 0 0 12px rgba(0, 180, 219, 0.6);
+}
+
+/* Glass Cards */
+.glass-card {
+  background: rgba(20, 30, 40, 0.6);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 16px;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.4);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.glass-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.5);
+}
+
+/* Charts */
+.chart-canvas {
+  height: 250px !important;
+  width: 100% !important;
+}
+
+/* Inputs, Textareas, Selects */
+input[type="text"],
+input[type="date"],
+input[type="number"],
+textarea,
+select {
+  background-color: #222831;
+  color: #f0f0f0;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 8px;
+  border-radius: 6px;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+  /* Remove default appearance for most browsers: */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+input[type="text"]:focus,
+input[type="date"]:focus,
+input[type="number"]:focus,
+textarea:focus,
+select:focus {
+  outline: none;
+  border-color: var(--accent-color);
+  box-shadow: 0 0 8px var(--accent-color);
+  background-color: #2a3942;
+}
+
+/* Placeholder color overrides for input/textarea */
+input::placeholder,
+textarea::placeholder {
+  color: #bfcad6 !important;
+  opacity: 1;
+}
+
+input::-webkit-input-placeholder,
+textarea::-webkit-input-placeholder {
+  color: #bfcad6 !important;
+}
+input:-moz-placeholder,
+textarea:-moz-placeholder {
+  color: #bfcad6 !important;
+}
+input::-moz-placeholder,
+textarea::-moz-placeholder {
+  color: #bfcad6 !important;
+}
+input:-ms-input-placeholder,
+textarea:-ms-input-placeholder {
+  color: #bfcad6 !important;
+}
+
+/* Select & Option styles for category dropdown */
+select {
+  background-color: #222831 !important;
+  color: #f0f0f0 !important;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 8px;
+  border-radius: 6px;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+/* Internet Explorer 10+ */
+select::-ms-expand {
+  background-color: #222831;
+  color: #f0f0f0;
+}
+
+/* Dropdown options */
+option {
+  background-color: #222831;
+  color: #f0f0f0;
+}
+
+

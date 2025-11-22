@@ -1,0 +1,22 @@
+'''Practical - 5[2]'''
+import nltk
+nltk.download('wordnet')
+from nltk.corpus import wordnet as wn
+#Synonyms of all senses of a word
+synonyms = []
+for syn in wn.synsets("happy"):
+    for lemma in syn.lemmas():
+        synonyms.append(lemma.name())
+print(set(synonyms))
+#Synonyms of a particular sense of a word
+sense2 = wn.synset("happy.a.04") # "well expressed and to the point"
+print("Sense definition:", sense2.definition())
+print("Synonyms:", [lemma.name() for lemma in sense2.lemmas()])
+
+#Antonyms of all senses of a word
+antonyms = []
+for syn in wn.synsets("happy"): # Loop over all senses (synsets) of "happy"
+    for lemma in syn.lemmas():
+        if lemma.antonyms():
+            antonyms.append(lemma.antonyms()[0].name())
+print("Antonyms of 'happy':", set(antonyms))

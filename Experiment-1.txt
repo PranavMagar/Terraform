@@ -1,0 +1,78 @@
+import pandas as pd
+import numpy as np
+import os
+import matplotlib.pyplot as plt
+
+print(os.getcwd())
+
+df = pd.read_csv("C:/Users/Acer/Downloads/Titanic-Dataset.csv")
+df.head()
+
+df.duplicated()
+
+df.info()
+
+cat_col = [col for col in df.columns if df[col].dtype == 'object']
+print('Categorical columns :', cat_col)
+
+num_col = [col for col in df.columns if df[col].dtype != 'object']
+print('Numerical columns :', num_col)
+
+df1 = df.drop(columns=['Name', 'Ticket'])
+df1.shape
+
+df.isnull()
+
+round((df1.isnull().sum() / df1.shape[0]) * 100, 2)
+
+df2 = df1.drop(columns='Cabin')
+df2.dropna(subset=['Embarked'], axis=0, inplace=True)
+df2.shape
+
+df3 = df2.fillna(df2.Age.mean())
+df3.isnull().sum()
+
+plt.boxplot(df3['Age'], vert=False)
+plt.ylabel('Variable')
+plt.xlabel('Age')
+plt.title('Box Plot (before outlier removal)')
+plt.show()
+
+mean = df3['Age'].mean()
+std = df3['Age'].std()
+lower_bound = mean - std * 2
+upper_bound = mean + std * 2
+print('Lower Bound :', lower_bound)
+print('Upper Bound :', upper_bound)
+
+df4 = df3[(df3['Age'] >= lower_bound) & (df3['Age'] <= upper_bound)]
+df4.shape
+
+Q1 = df3['Age'].quantile(0.25)
+Q3 = df3['Age'].quantile(0.75)
+IQR = Q3 - Q1
+lower = Q1 - 1.5 * IQR
+upper = Q3 + 1.5 * IQR
+
+upper_array = np.where(df3['Age'] >= upper)[0]
+lower_array = np.where(df3['Age'] <= lower)[0]
+
+print("Upper outlier indices:", upper_array)
+print("Lower outlier indices:", lower_array)
+
+outlier_idx = df3.index[np.concatenate([upper_array, lower_array])]
+df3.drop(index=outlier_idx, inplace=True)
+
+print("New Shape:", df3.shape)
+
+plt.boxplot(df3['Age'], vert=False)
+plt.ylabel('Variable')
+plt.xlabel('Age')
+plt.title('Box Plot (After Outlier Removal)')
+plt.show()
+
+X = df3[['Pclass', 'Sex', 'Age', 'SibSp', 'Parch', 'Fare', 'Embarked']]
+Y = df3['Survived']
+
+print("Features shape:", X.shape)
+print("Target shape:", Y.shape)
