@@ -1,0 +1,62 @@
+pipeline {
+    agent any
+
+    environment {
+        DOCKER_IMAGE = "expensetracker-app"
+        DOCKER_TAG = "${env.BUILD_NUMBER}"
+        REGISTRY = "your-docker-registry" // e.g., AWS ECR or Docker Hub username
+    }
+
+    stages {
+        stage('Lint') {
+            steps {
+                sh 'pip install flake8'
+                sh 'flake8 app/ --count --select=E9,F63,F7,F82 --show-source --statistics'
+                sh 'flake8 app/ --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics'
+            }
+        }
+
+        stage('Test') {
+            steps {
+                sh 'pip install -r requirements.txt'
+                sh 'pytest'
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    dockerImage = docker.build("${REGISTRY}/${DOCKER_IMAGE}:${DOCKER_TAG}")
+                }
+            }
+        }
+
+        stage('Push Docker Image') {
+            steps {
+                script {
+                    docker.withRegistry('', 'docker-hub-credentials') {
+                        dockerImage.push()
+                        dockerImage.push("latest")
+                    }
+                }
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                sshagent(['ec2-ssh-key']) {
+                    sh """
+                        ssh -o StrictHostKeyChecking=no ubuntu@<EC2-IP> '
+                            docker pull ${REGISTRY}/${DOCKER_IMAGE}:latest
+                            docker stop expense-app || true
+                            docker rm expense-app || true
+                            docker run -d --name expense-app -p 80:8000 \
+                                -e DATABASE_URL=postgresql://postgres:postgres@db:5432/expense_tracker \
+                                ${REGISTRY}/${DOCKER_IMAGE}:latest
+                        '
+                    """
+                }
+            }
+        }
+    }
+}
